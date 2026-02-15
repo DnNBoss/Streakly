@@ -5,6 +5,7 @@
 //  Created by Дмитрий Козлов on 15.02.26.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct StreaklyApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Challenge.self)
     }
 }
