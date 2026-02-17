@@ -19,14 +19,15 @@ struct TodayProgressView: View {
                 .foregroundStyle(.lightWhite.opacity(0.8))
                 .frame(maxWidth: .infinity, alignment: .trailing)
             
-            LinearProgressBarView(progress: 0.6)
+            Gauge(value: 0.6) {}
+                .tint(.lightGreen)
             
             Text("“If there is no struggle, there is no progress. - Frederick Douglass”")
                 .font(.subheadline)
                 .italic()
                 .foregroundStyle(.lightWhite.opacity(0.8))
         }
-        .padding(10)
+        .padding()
         .frame(maxWidth: .infinity)
         .background(.lightDark)
         .clipShape(RoundedRectangle(cornerRadius: 15))
