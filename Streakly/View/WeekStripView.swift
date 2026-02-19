@@ -24,6 +24,7 @@ struct WeekStripView: View {
             ForEach(weekDates, id: \.self) { date in
                 DayCellView(date: date,
                             isSelected: Calendar.current.isDate(date, inSameDayAs: selectedDate))
+                .frame(maxWidth: .infinity)
                 .onTapGesture {
                     selectedDate = date
                 }

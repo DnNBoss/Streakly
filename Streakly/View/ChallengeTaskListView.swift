@@ -12,7 +12,6 @@ struct ChallengeTaskListView: View {
         ScrollView {
             ForEach(0..<20) { _ in
                 ChallengeTaskCardView(task: .example)
-                    .padding(.bottom, 10)
             }
         }
     }

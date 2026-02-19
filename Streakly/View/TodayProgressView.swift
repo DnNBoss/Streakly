@@ -31,7 +31,6 @@ struct TodayProgressView: View {
         .frame(maxWidth: .infinity)
         .background(.lightDark)
         .clipShape(RoundedRectangle(cornerRadius: 15))
-        .padding(.horizontal, 20)
     }
 }
 
