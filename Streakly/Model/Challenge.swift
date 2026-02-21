@@ -16,17 +16,16 @@ class Challenge {
     var unit: String
     var startDate: Date
     var endDate: Date?
-    var currentValue: Int
-    var tasks: [ChallengeTask] = []
+    var repeatType: RepeatType
     
-    init(title: String, goal: Int, unit: String, startDate: Date, endDate: Date? = nil, currentValue: Int) {
+    init(title: String, goal: Int, unit: String, startDate: Date, endDate: Date? = nil, repeatType: RepeatType) {
         self.title = title
         self.goal = goal
         self.unit = unit
         self.startDate = startDate
         self.endDate = endDate
-        self.currentValue = currentValue
+        self.repeatType = repeatType
     }
     
-    static let example = Challenge(title: "1 day push up challenge", goal: 100, unit: "reps", startDate: Date(), endDate: Date().addingTimeInterval(86400 * 7), currentValue: 10)
+    static let example = Challenge(title: "1 day push up challenge", goal: 100, unit: "reps", startDate: Date(), endDate: Date().addingTimeInterval(86400 * 7), repeatType: .daily)
 }
