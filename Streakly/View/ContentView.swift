@@ -15,7 +15,7 @@ struct ContentView: View {
                     Label("Main", systemImage: "house")
                 }
             
-            Text("Add")
+            AddChallengeView()
                 .tabItem {
                     Label("Add", systemImage: "plus")
                 }
