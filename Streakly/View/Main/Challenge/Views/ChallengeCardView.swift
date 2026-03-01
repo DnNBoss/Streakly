@@ -1,33 +1,37 @@
 //
-//  ChallengeTaskCardView.swift
+//  ChallengeCardView.swift
 //  Streakly
 //
-//  Created by Дмитрий Козлов on 15.02.26.
+//  Created by Дмитрий Козлов on 27.02.26.
 //
 
 import SwiftUI
 
-struct ChallengeTaskCardView: View {
+struct ChallengeCardView: View {
+    let challenge: Challenge
+    
     var body: some View {
         VStack(spacing: 10) {
             HStack {
-                Text("Title")
+                Text(challenge.title + challenge.title)
                     .font(.title)
+                    .bold()
                     .foregroundStyle(.lightWhite)
+                    .lineLimit(1)
                
                 Spacer()
                 
-                CircularProgressBarView(progress: 0.5)
+                CircularProgressBarView(progress: Double(challenge.goal / 100))
                     .foregroundStyle(.lightWhite)
             }
             
             HStack {
-                Text("10")
+                Text("\(challenge.startDate)")
                     .foregroundStyle(.lightWhite.opacity(0.8))
                 
                 Spacer()
                 
-                Text("5")
+                Text(challenge.title)
                     .foregroundStyle(.lightWhite.opacity(0.8))
             }
         }
@@ -39,5 +43,5 @@ struct ChallengeTaskCardView: View {
 }
 
 #Preview {
-    ChallengeTaskCardView()
+    ChallengeCardView(challenge: .example)
 }

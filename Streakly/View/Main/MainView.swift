@@ -18,9 +18,9 @@ struct MainView: View {
                 TaskFilterBarView()
                 
                 ChallengeTaskListView()
-                    .navigationTitle("Today")
-                    .navigationBarTitleDisplayMode(.inline)
             }
+            .navigationTitle("Today")
+            .navigationBarTitleDisplayMode(.inline)
             .padding(.horizontal, 20)
             .toolbar {
                 Button("Settings", systemImage: "gearshape") {

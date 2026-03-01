@@ -20,7 +20,7 @@ struct ContentView: View {
                     Label("Add", systemImage: "plus")
                 }
             
-            Text("Challenges")
+            ChallengeListView()
                 .tabItem {
                     Label("Challenges", systemImage: "target")
                 }
