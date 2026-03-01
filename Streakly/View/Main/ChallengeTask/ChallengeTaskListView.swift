@@ -11,7 +11,7 @@ struct ChallengeTaskListView: View {
     var body: some View {
         ScrollView {
             ForEach(0..<20) { _ in
-                ChallengeTaskCardView(task: .example)
+                ChallengeTaskCardView()
             }
         }
     }

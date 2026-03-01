@@ -5,9 +5,12 @@
 //  Created by Дмитрий Козлов on 20.02.26.
 //
 
+import SwiftData
 import SwiftUI
 
 struct AddChallengeView: View {
+    @Environment(\.modelContext) var modelContext
+    
     @State private var title = ""
     @State private var goal = 0
     @State private var unit = ""
@@ -34,7 +37,7 @@ struct AddChallengeView: View {
                 }
                 
                 Section("Start date") {
-                    DatePicker("Start date", selection: $startDate, displayedComponents: .date)
+                    DatePicker("Start date", selection: $startDate, in: Date()..., displayedComponents: .date)
                 }
                 
                 Section("Repeat Challenge") {
@@ -56,18 +59,26 @@ struct AddChallengeView: View {
                 }
                 
                 Section("End date") {
-                    EndDateView(startDate: startDate)
+                    EndDateView(endDate: $endDate, startDate: startDate)
                 }
                 
                 Section {
                     Button("Create") {
+                        let challenge = Challenge(title: title, goal: goal, unit: unit, startDate: startDate, endDate: endDate, repeatType: repeatType)
                         
+                        modelContext.insert(challenge)
                     }
                 }
+                .disabled(hasValidChallengeData())
             }
             .navigationTitle("Add new Challenge")
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+    
+    private func hasValidChallengeData() -> Bool {
+        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        || goal <= 0
     }
 }
 

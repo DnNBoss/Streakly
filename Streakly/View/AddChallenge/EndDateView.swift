@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct EndDateView: View {
+    @Binding var endDate: Date?
+
     @State private var isActive = false
-    @State private var endDate: Date = Date.now
+    
+    let startDate: Date
     
     private var durationBinding: Binding<Int> {
         Binding {
+            guard let endDate else { return 1 }
+            
             let calendar = Calendar.current
             let start = calendar.startOfDay(for: startDate)
             let end = calendar.startOfDay(for: endDate)
@@ -22,11 +27,9 @@ struct EndDateView: View {
             return max(1, result + 1)
             
         } set: { value in
-            endDate = Calendar.current.date(byAdding: .day, value: value - 1, to: startDate)!
+            endDate = Calendar.current.date(byAdding: .day, value: value - 1, to: startDate)
         }
     }
-    
-    let startDate: Date
     
     var body: some View {
         Toggle("End Challenge", isOn: $isActive)
@@ -41,12 +44,16 @@ struct EndDateView: View {
                         .multilineTextAlignment(.trailing)
                 }
                 
-                DatePicker("End Date", selection: $endDate, in: Date()..., displayedComponents: .date)
+                DatePicker("End Date", selection:
+                            Binding(
+                                get: { endDate ?? startDate },
+                                set: { endDate = $0 }),
+                           in: Date()..., displayedComponents: .date)
             }
         }
     }
 }
 
 #Preview {
-    EndDateView(startDate: .now)
+    EndDateView(endDate: .constant(.now), startDate: .now)
 }
