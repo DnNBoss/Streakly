@@ -9,46 +9,41 @@ import SwiftData
 import SwiftUI
 
 struct AddChallengeView: View {
-    @Environment(\.modelContext) var modelContext
+    @Environment(ChallengeRepository.self) private var repository
     
-    @State private var title = ""
-    @State private var goal = 0
-    @State private var unit = ""
-    @State private var startDate = Date.now
-    @State private var repeatType = RepeatType.weekly
-    @State private var endDate: Date?
+    @State private var viewModel = ViewModel()
     
     var body: some View {
         NavigationStack {
             Form {
                 Section("Title") {
-                    TextField("Title", text: $title)
+                    TextField("Title", text: $viewModel.title)
                 }
                 
                 Section("Goal") {
                     HStack {
-                        TextField("Goal", value: $goal, format: .number)
+                        TextField("Goal", value: $viewModel.goal, format: .number)
                             .keyboardType(.numberPad)
                         
                         Divider()
                         
-                        TextField("Unit", text: $unit)
+                        TextField("Unit", text: $viewModel.unit)
                     }
                 }
                 
                 Section("Start date") {
-                    DatePicker("Start date", selection: $startDate, in: Date()..., displayedComponents: .date)
+                    DatePicker("Start date", selection: $viewModel.startDate, in: Date()..., displayedComponents: .date)
                 }
                 
                 Section("Repeat Challenge") {
-                    Picker("Repeat Challenge", selection: $repeatType) {
+                    Picker("Repeat Challenge", selection: $viewModel.repeatType) {
                         ForEach(RepeatType.allCases) { r in
                             Text(r.rawValue).tag(r)
                         }
                     }
                     .pickerStyle(.segmented)
                     
-                    switch repeatType {
+                    switch viewModel.repeatType {
                     case .daily:
                         Text("Every day")
                     case .weekly:
@@ -59,29 +54,35 @@ struct AddChallengeView: View {
                 }
                 
                 Section("End date") {
-                    EndDateView(endDate: $endDate, startDate: startDate)
+                    EndDateView(endDate: $viewModel.endDate, startDate: viewModel.startDate)
                 }
                 
                 Section {
                     Button("Create") {
-                        let challenge = Challenge(title: title, goal: goal, unit: unit, startDate: startDate, endDate: endDate, repeatType: repeatType)
-                        
-                        modelContext.insert(challenge)
+                        viewModel.addChallenge(repository: repository)
                     }
                 }
-                .disabled(hasValidChallengeData())
+                .disabled(viewModel.hasInvalidChallengeData())
             }
             .navigationTitle("Add new Challenge")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
-    
-    private func hasValidChallengeData() -> Bool {
-        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        || goal <= 0
-    }
 }
 
 #Preview {
-    AddChallengeView()
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Challenge.self, configurations: config)
+
+        let context = container.mainContext
+        let example = Challenge(title: "1 day push up challenge", goal: 100, unit: "reps", startDate: Date().addingTimeInterval(-86400 * 2), endDate: Date().addingTimeInterval(86400 * 7), repeatType: .daily)
+
+        context.insert(example)
+
+        return AddChallengeView()
+            .environment(ChallengeRepository(modelContext: context))
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }
