@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct MainView: View {
+    @Environment(ChallengeRepository.self) private var repository
+    private let scheduler = ChallengeTaskScheduler()
+    private var viewModel = ViewModel()
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -17,7 +21,7 @@ struct MainView: View {
                 
                 TaskFilterBarView()
                 
-                ChallengeTaskListView()
+                ChallengeTaskListView(tasks: viewModel.tasks)
             }
             .navigationTitle("Today")
             .navigationBarTitleDisplayMode(.inline)
@@ -27,10 +31,16 @@ struct MainView: View {
                 }
                 .tint(.lightDark)
             }
+            .onAppear {
+                viewModel.load(repository: repository, scheduler: scheduler)
+            }
         }
     }
 }
 
 #Preview {
+    @Previewable @State var dependencies = AppDependencies()
+    
     MainView()
+        .environment(dependencies.repository)
 }

@@ -8,15 +8,19 @@
 import SwiftUI
 
 struct ChallengeTaskListView: View {
+    let tasks: [ChallengeTaskDTO]
+    
     var body: some View {
         ScrollView {
-            ForEach(0..<20) { _ in
-                ChallengeTaskCardView()
+            ForEach(tasks) { task in
+                ChallengeTaskCardView(task: task)
             }
         }
     }
 }
 
 #Preview {
-    ChallengeTaskListView()
+    let tasks = Array(repeating: ChallengeTaskDTO.example, count: 10)
+    
+    ChallengeTaskListView(tasks: tasks)
 }

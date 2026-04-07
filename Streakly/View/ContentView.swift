@@ -29,5 +29,9 @@ struct ContentView: View {
 }
 
 #Preview {
+    @Previewable @State var dependencies = AppDependencies()
+    
     ContentView()
+        .modelContainer(dependencies.modelContainer)
+        .environment(dependencies.repository)
 }
