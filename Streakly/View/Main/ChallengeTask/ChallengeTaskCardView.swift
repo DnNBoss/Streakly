@@ -8,28 +8,28 @@
 import SwiftUI
 
 struct ChallengeTaskCardView: View {
+    let task: ChallengeTaskDTO
+    
     var body: some View {
         VStack(spacing: 10) {
             HStack {
-                Text("Title")
+                Text(task.title)
                     .font(.title)
                     .foregroundStyle(.lightWhite)
                
                 Spacer()
                 
-                CircularProgressBarView(progress: 0.5)
-                    .foregroundStyle(.lightWhite)
+                CircularProgressBarView(progress: task.progress)
             }
             
             HStack {
-                Text("10")
-                    .foregroundStyle(.lightWhite.opacity(0.8))
+                Text(task.dayText)
                 
                 Spacer()
                 
-                Text("5")
-                    .foregroundStyle(.lightWhite.opacity(0.8))
+                Text(task.progressText)
             }
+            .foregroundStyle(.lightWhite.opacity(0.8))
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -39,5 +39,6 @@ struct ChallengeTaskCardView: View {
 }
 
 #Preview {
-    ChallengeTaskCardView()
+    ChallengeTaskCardView(task: .example)
+        .padding()
 }
