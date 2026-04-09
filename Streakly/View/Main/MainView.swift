@@ -9,13 +9,15 @@ import SwiftUI
 
 struct MainView: View {
     @Environment(ChallengeRepository.self) private var repository
+    
+    @State private var viewModel = ViewModel()
+    
     private let scheduler = ChallengeTaskScheduler()
-    private var viewModel = ViewModel()
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                WeekStripView()
+                WeekStripView(selectedDate: $viewModel.selectedDate)
                 
                 TodayProgressView()
                 
@@ -32,6 +34,9 @@ struct MainView: View {
                 .tint(.lightDark)
             }
             .onAppear {
+                viewModel.load(repository: repository, scheduler: scheduler)
+            }
+            .onChange(of: viewModel.selectedDate) {
                 viewModel.load(repository: repository, scheduler: scheduler)
             }
         }

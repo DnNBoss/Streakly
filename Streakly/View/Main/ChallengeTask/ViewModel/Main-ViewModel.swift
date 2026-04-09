@@ -12,11 +12,12 @@ extension MainView {
     @Observable
     final class ViewModel {
         var tasks: [ChallengeTaskDTO] = []
+        var selectedDate: Date = .now
         
-        func load(repository: ChallengeRepository, scheduler: ChallengeTaskScheduler, for date: Date = .now) {
+        func load(repository: ChallengeRepository, scheduler: ChallengeTaskScheduler) {
             do {
                 let challenges = try repository.fetchAllChallenges()
-                tasks = scheduler.makeTasks(from: challenges, for: date)
+                tasks = scheduler.makeTasks(from: challenges, for: selectedDate)
             } catch {
                 print(error)
             }

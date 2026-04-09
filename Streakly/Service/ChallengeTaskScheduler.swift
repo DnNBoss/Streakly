@@ -51,10 +51,16 @@ struct ChallengeTaskScheduler {
     }
     
     private func isActive(_ challenge: Challenge, on date: Date) -> Bool {
-        guard date >= challenge.startDate else { return false }
+        let day = calendar.startOfDay(for: date)
+        let challengeDay = calendar.startOfDay(for: challenge.startDate)
         
-        if let endDate = challenge.endDate, date > endDate {
-            return false
+        guard day >= challengeDay else { return false }
+        
+        if let endDate = challenge.endDate {
+            let end = calendar.startOfDay(for: endDate)
+            if day > end {
+                return false
+            }
         }
         
         return true
