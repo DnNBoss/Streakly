@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WeekStripView: View {
-    @State private var selectedDate: Date = .now
+    @Binding var selectedDate: Date
     
     private var weekDates: [Date] {
         let calendar = Calendar.current
@@ -34,5 +34,6 @@ struct WeekStripView: View {
 }
 
 #Preview {
-    WeekStripView()
+    @Previewable @State var selectedDate: Date = .now
+    WeekStripView(selectedDate: $selectedDate)
 }
