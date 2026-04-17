@@ -32,8 +32,12 @@ struct ChallengeCardView: View {
                
                 Spacer()
                 
-                CircularProgressBarView(progress: Double(challenge.goal / 100))
-                    .foregroundStyle(.lightWhite)
+                CircularProgressBarView(progress: Double(challenge.goal / 100)) {
+                    Image(systemName: challenge.isActive() ? "play" : "checkmark")
+                        .font(.title)
+                        .bold()
+                        .foregroundStyle(.lightWhite)
+                }
             }
             
             HStack {
