@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct CircularProgressBarView: View {
+struct CircularProgressBarView<Content: View>: View {
     let progress: Double
+    let content: () -> Content
     
     var body: some View {
         ZStack {
@@ -20,15 +21,34 @@ struct CircularProgressBarView: View {
                 .stroke(.lightGreen, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             
+            content()
+        }
+        .frame(width: 50, height: 50)
+    }
+    
+    init(progress: Double, content: @escaping () -> Content) {
+        self.progress = progress
+        self.content = content
+    }
+}
+
+extension CircularProgressBarView where Content == Text {
+    init(progress: Double) {
+        self.progress = progress
+        self.content = {
             Text("\(Int(progress * 100))%")
                 .font(.subheadline)
                 .foregroundStyle(.lightWhite)
         }
-        .frame(width: 50, height: 50)
     }
 }
 
 #Preview {
-    CircularProgressBarView(progress: 1)
+    CircularProgressBarView(progress: 1) {
+        Image(systemName: "pause")
+            .font(.title)
+            .bold()
+            .foregroundStyle(.lightWhite)
+    }
         .background(.lightDark)
 }
