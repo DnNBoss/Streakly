@@ -12,6 +12,7 @@ extension ChallengeListView {
     @Observable
     final class ViewModel {
         var challenges: [Challenge] = []
+        var selectedChallenge: Challenge?
         
         func reload(repository: ChallengeRepository) {
             do {
