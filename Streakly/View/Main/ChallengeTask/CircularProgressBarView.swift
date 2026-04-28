@@ -9,36 +9,84 @@ import SwiftUI
 
 struct CircularProgressBarView<Content: View>: View {
     let progress: Double
+    let width: CGFloat
+    let height: CGFloat
+    let lineWidth: CGFloat
+    let trackColor: Color
+    let progressColor: Color?
     let content: () -> Content
+    
+    private var resolvedColor: Color {
+        if let progressColor {
+            return progressColor
+        }
+        
+        switch progress {
+        case ..<0.3:
+            return .red
+        case ..<0.6:
+            return .orange
+        case ..<0.9:
+            return .yellow
+        default:
+            return .green
+        }
+    }
     
     var body: some View {
         ZStack {
             Circle()
-                .stroke(.lightGreen.opacity(0.2), lineWidth: 5)
+                .stroke(trackColor, lineWidth: lineWidth)
             
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(.lightGreen, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                .stroke(
+                    resolvedColor,
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
+                .animation(.easeInOut, value: progress)
             
             content()
         }
-        .frame(width: 50, height: 50)
+        .frame(width: width, height: height)
     }
     
-    init(progress: Double, content: @escaping () -> Content) {
+    init(
+        progress: Double,
+        width: CGFloat = 50,
+        height: CGFloat = 50,
+        lineWidth: CGFloat = 5,
+        trackColor: Color = .gray.opacity(0.2),
+        progressColor: Color? = nil,
+        content: @escaping () -> Content
+    ) {
         self.progress = progress
+        self.width = width
+        self.height = height
+        self.lineWidth = lineWidth
+        self.trackColor = trackColor
+        self.progressColor = progressColor
         self.content = content
     }
 }
 
 extension CircularProgressBarView where Content == Text {
-    init(progress: Double) {
-        self.progress = progress
-        self.content = {
+    init(progress: Double,
+         width: CGFloat = 50,
+         height: CGFloat = 50,
+         lineWidth: CGFloat = 5,
+         textColor: Color = .lightWhite,
+         textFont: Font = .subheadline
+    ) {
+        self.init(
+            progress: progress,
+            width: width,
+            height: height,
+            lineWidth: lineWidth
+        ) {
             Text("\(Int(progress * 100))%")
-                .font(.subheadline)
-                .foregroundStyle(.lightWhite)
+                .font(textFont)
+                .foregroundStyle(textColor)
         }
     }
 }
@@ -50,5 +98,5 @@ extension CircularProgressBarView where Content == Text {
             .bold()
             .foregroundStyle(.lightWhite)
     }
-        .background(.lightDark)
+    .background(.lightDark)
 }
