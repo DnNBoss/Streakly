@@ -10,18 +10,19 @@ import SwiftData
 @MainActor
 final class AppDependencies {
     let modelContainer: ModelContainer
-    let repository: ChallengeRepository
+    let services: ServiceContainer
     
     init() {
-        let config = ModelConfiguration()
-        
         do {
-            modelContainer = try ModelContainer(for: Challenge.self, configurations: config)
+            let schema = Schema([Challenge.self, DailyProgress.self])
+            let config = ModelConfiguration(schema: schema)
+            modelContainer = try ModelContainer(for: schema, configurations: config)
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }
         
-        let context = modelContainer.mainContext
-        repository = ChallengeRepository(modelContext: context)
+        let repo = ChallengeRepository(modelContext: modelContainer.mainContext)
+        let challengeService = ChallengeService(repository: repo)
+        services = ServiceContainer(challengeService: challengeService)
     }
 }
